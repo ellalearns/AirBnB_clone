@@ -37,7 +37,6 @@ class BaseModel():
             self.created_at = self.the_time.now()
             self.updated_at = self.the_time.now()
 
-
     def __str__(self):
         result = "[{}] ({}) {}".format(type(self).__name__,
                                        self.id, self.__dict__)
