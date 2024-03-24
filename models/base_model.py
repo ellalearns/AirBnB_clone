@@ -19,13 +19,23 @@ class BaseModel():
 
     the_time = datetime.datetime
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         initializes the base model
+        uses **kwargs if present
         """
-        self.id = str(uuid.uuid4())
-        self.created_at = self.the_time.now()
-        self.updated_at = self.the_time.now()
+        if kwargs:
+            for key, value in kwargs.items():
+                if key == "created_at" or key == "updated_at":
+                    setattr(self, key, self.the_time.fromisoformat(value))
+                elif key == "__class__":
+                    pass
+                else:
+                    setattr(self, key, value)
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = self.the_time.now()
+            self.updated_at = self.the_time.now()
 
     def __str__(self):
         result = "[{}] ({}) {}".format(type(self).__name__,
@@ -48,7 +58,7 @@ class BaseModel():
         and returns that python dict
         """
         result_dict = {}
-        result_dict = self.__dict__
+        result_dict = self.__dict__.copy()
         result_dict["__class__"] = type(self).__name__
         result_dict["created_at"] = str(result_dict["created_at"].isoformat())
         result_dict["updated_at"] = str(result_dict["updated_at"].isoformat())

@@ -59,6 +59,24 @@ class TestBaseModel(unittest.TestCase):
         self.assertRegex(ret_created_date, regex_p)
         self.assertRegex(ret_updated_date, regex_p)
 
+    def test_from_dict(self):
+
+        self.thirdbase = BaseModel()
+        self.thirdbase.name = "Checking"
+        self.thirdbase.number = 7
+        returned_dict = self.thirdbase.to_dict()
+
+        self.fourthbase = BaseModel(**returned_dict)
+        should_contain = ['id', 'created_at', 'updated_at',
+                          'name', 'number', '__class__']
+
+        for key in should_contain:
+            if key != "__class__":
+                self.assertEqual(getattr(self.thirdbase, key),
+                                 getattr(self.fourthbase, key))
+
+        self.assertNotEqual(self.thirdbase, self.fourthbase)
+
 
 if __name__ == "__main__":
     unittest.main()
