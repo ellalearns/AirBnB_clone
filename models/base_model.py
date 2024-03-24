@@ -17,18 +17,20 @@ class BaseModel():
     ...will inherit
     """
 
+    the_time = datetime.datetime
+
 
     def __init__(self):
         """
         initializes the base model
         """
         self.id = str(uuid.uuid4())
-        self.created_at = datetime.datetime
-        self.updated_at = datetime.datetime
+        self.created_at = self.the_time.now()
+        self.updated_at = self.the_time.now()
 
 
     def __str__(self):
-        result = "[Base Model] ({}) {}".format(self.id, self.__dict__)
+        result = "[{}] ({}) {}".format(type(self).__name__ ,self.id, self.__dict__)
         return result
 
 
@@ -37,12 +39,18 @@ class BaseModel():
         updates the public instance attribute 
         updated_at with the current datetime
         """
-        self.updated_at = datetime.datetime
+        self.updated_at = self.the_time.now()
         return (self.updated_at)
 
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         result_dict = {}
-
+        result_dict = self.__dict__
+        result_dict["__class__"] = type(self).__name__
 
         return result_dict
+
+
+obj = BaseModel()
+# print(obj.__str__())
+print(obj.to_dict())
