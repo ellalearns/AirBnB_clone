@@ -22,10 +22,10 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.firstbase.created_at, datetime.datetime)
         self.assertIsInstance(self.firstbase.updated_at, datetime.datetime)
         self.assertNotEqual(self.firstbase.id, self.secondbase.id)
-    
+
     def test_save(self):
         self.assertIsInstance(self.firstbase.save(), datetime.datetime)
-    
+
     def test_str(self):
         supposed_result = '[{}] ({}) {}'\
             .format(type(self.firstbase).__name__,
@@ -33,7 +33,7 @@ class TestBaseModel(unittest.TestCase):
                     self.firstbase.__dict__)
         returned_result = self.firstbase.__str__()
         self.assertEqual(supposed_result, returned_result)
-    
+
     def test_to_dict(self):
 
         # create custom attributes for object
@@ -42,12 +42,14 @@ class TestBaseModel(unittest.TestCase):
 
         # check if the returned dict contains all the attributes it should
         returned_dict = self.firstbase.to_dict()
-        should_contain = ['id', 'created_at', 'updated_at', 'name', 'number', '__class__']
+        should_contain = ['id', 'created_at', 'updated_at',
+                          'name', 'number', '__class__']
         for key in should_contain:
             self.assertIn(key, returned_dict)
-        
+
         # check if the class key value is correct
-        self.assertEqual(returned_dict['__class__'], type(self.firstbase).__name__)
+        self.assertEqual(returned_dict['__class__'],
+                         type(self.firstbase).__name__)
 
         # check if the dates are in correct format
         ret_created_date = returned_dict['created_at']
@@ -56,7 +58,7 @@ class TestBaseModel(unittest.TestCase):
 
         self.assertRegex(ret_created_date, regex_p)
         self.assertRegex(ret_updated_date, regex_p)
-        
+
 
 if __name__ == "__main__":
     unittest.main()
