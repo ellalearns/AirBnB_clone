@@ -41,6 +41,12 @@ class BaseModel():
         return (self.updated_at)
 
     def to_dict(self) -> dict:
+        """
+        adds the object attributes
+        and other details required
+        into a python dict
+        and returns that python dict
+        """
         result_dict = {}
         result_dict = self.__dict__
         result_dict["__class__"] = type(self).__name__
