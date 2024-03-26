@@ -25,15 +25,19 @@ class FileStorage():
     def save(self):
         to_serialize = {}
         for key, value in self.__objects.items():
-            to_serialize[key] = value.to_dict()
+            if type(value) is dict:
+                to_serialize[key] = value
+            else:
+                to_serialize[key] = value.to_dict()
         with open(self.__file_path, "w", encoding="utf-8") as jsonFile:
             json.dump(to_serialize, jsonFile)
 
     def reload(self):
-        try:
-            with open(self.__file_path, "r", encoding="utf-8") as jsonFile:
-                for line in jsonFile:
-                    data = json.loads(line)
-            # print(data)
-        except FileNotFoundError:
-            pass
+        pass
+        # try:
+        #     with open(self.__file_path, "r", encoding="utf-8") as jsonFile:
+        #         for line in jsonFile:
+        #             data = json.loads(line)
+        #     self.__objects = data
+        # except FileNotFoundError:
+        #     pass
