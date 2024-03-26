@@ -70,3 +70,6 @@ class TestFileStorage(unittest.TestCase):
     #     """
     #     self.abasemodel = BaseModel()
     #     self.akey = "BaseModel." + self.abasemodel.id
+
+if __name__ == "__main__":
+    unittest.main()

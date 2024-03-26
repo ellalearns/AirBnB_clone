@@ -35,9 +35,13 @@ class FileStorage():
     def reload(self):
         pass
         # try:
-        #     with open(self.__file_path, "r", encoding="utf-8") as jsonFile:
-        #         for line in jsonFile:
-        #             data = json.loads(line)
-        #     self.__objects = data
+        #     with open(self.__file_path, "r") as jsonFile:
+        #         data = json.load(jsonFile)
+        #         print("data loaded -> ", data)
+        #         print("objs before ->", self.__objects)
+        #         self.__objects = data.copy()
+        #         print("objects now ->", self.__objects)
+        #     print("point ->", self.__objects)
         # except FileNotFoundError:
         #     pass
+
