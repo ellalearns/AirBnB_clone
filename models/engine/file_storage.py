@@ -44,4 +44,3 @@ class FileStorage():
         #     print("point ->", self.__objects)
         # except FileNotFoundError:
         #     pass
-

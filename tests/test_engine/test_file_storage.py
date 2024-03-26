@@ -17,15 +17,15 @@ class TestFileStorage(unittest.TestCase):
 
     def setUp(self):
         self.firstStorage = FileStorage()
-    
+
     def test_all(self):
         """
-        tests that new objects are correctly saved 
+        tests that new objects are correctly saved
         in __objects of FileStorage
         """
         self.returned_all = self.firstStorage.all()
         self.assertEqual(dict, type(self.returned_all))
-    
+
     def test_new(self):
         """
         confirms that a new object gets added
@@ -42,7 +42,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertIn(self.thekey, self.firstStorage.all())
         self.assertIn(self.thekey2, self.firstStorage.all())
         self.assertIn(self.thekey3, self.firstStorage.all())
-    
+
     def test_save(self):
         """
         confirms that json data was correctly
@@ -59,17 +59,18 @@ class TestFileStorage(unittest.TestCase):
         self.firstStorage.save()
         with open("ModelObjects.json", "r", encoding="utf-8") as storageFile:
             data = json.load(storageFile)
-        
+
         self.assertTrue(self.itskey1 in data)
         self.assertTrue(self.itskey2 in data)
         self.assertTrue(self.itskey3 in data)
-    
+
     # def test_reload(self):
     #     """
     #     ensures that file storage is correctly loaded
     #     """
     #     self.abasemodel = BaseModel()
     #     self.akey = "BaseModel." + self.abasemodel.id
+
 
 if __name__ == "__main__":
     unittest.main()
