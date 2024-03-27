@@ -12,9 +12,8 @@ class HBNBCommand(cmd.Cmd):
     this is the main entry point
     for the airbnb console tool
     """
-    prompt = "(hbnb)"
+    prompt = "(hbnb) "
     intro = "Welcome to Ella's Airbnb :)"
-    ruler = "==========="
 
     def do_EOF(self, line):
         """
