@@ -6,6 +6,8 @@ main entry point for console tool
 
 import cmd
 import models
+from models import storage
+import models.base_model
 
 
 class HBNBCommand(cmd.Cmd):
@@ -55,6 +57,31 @@ class HBNBCommand(cmd.Cmd):
             initNewClass = newClass()
             initNewClass.save()
             print(initNewClass.id)
+        else:
+            print("** class doesn't exist **")
+
+    def do_show(self, command):
+        """
+        prints the string representation of an instance
+        based on class name and id
+        """
+        if not command:
+            print("** class name missing **")
+            return None
+        command = command.split()
+        if command[0] in models.all_classes:
+            if len(command) == 1:
+                print("** instance id missing **")
+            else:
+                key = command[0] + "." + command[1]
+                all_objects = storage.all()
+                if key in all_objects:
+                    obj = all_objects[key]
+                    newClassObject = models.all_classes[command[0]]
+                    initNewClassObject = newClassObject(obj)
+                    print(initNewClassObject.__str__())
+                else:
+                    print("** no instance found **")
         else:
             print("** class doesn't exist **")
 
