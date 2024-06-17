@@ -13,7 +13,7 @@ class HBNBCommand(cmd.Cmd):
     for the airbnb console tool
     """
     prompt = "(hbnb) "
-    intro = "Welcome to Ella's Airbnb :)"
+    # intro = "Welcome to Ella's Airbnb :)"
 
     def do_EOF(self, line):
         """
