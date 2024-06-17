@@ -5,7 +5,7 @@ main entry point for console tool
 
 
 import cmd
-from models.base_model import BaseModel
+import models
 
 
 class HBNBCommand(cmd.Cmd):
@@ -39,7 +39,7 @@ class HBNBCommand(cmd.Cmd):
         help about quit function
         """
         print("wanna quit?")
-    
+
     def do_create(self, command):
         """
         creates a new instance of BaseModel
@@ -47,15 +47,16 @@ class HBNBCommand(cmd.Cmd):
         prints the id
         """
         if not command:
-            print("*** class name missing ***")
+            print("** class name missing **")
             return None
         command = command.split()
-        if command[0] == "BaseModel":
-            newBaseModel = BaseModel()
-            newBaseModel.save()
-            print(newBaseModel.id)
+        if command[0] in models.all_classes:
+            newClass = models.all_classes[command[0]]
+            initNewClass = newClass()
+            initNewClass.save()
+            print(initNewClass.id)
         else:
-            print("*** class doesn't exist ***")
+            print("** class doesn't exist **")
 
 
 if __name__ == '__main__':
