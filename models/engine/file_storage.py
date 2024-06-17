@@ -11,6 +11,8 @@ import json
 
 class FileStorage():
     """
+    serializes instances to json file
+    deserializes json file to instances
     """
     __file_path = "ModelObjects.json"
     __objects = {}
@@ -33,14 +35,9 @@ class FileStorage():
             json.dump(to_serialize, jsonFile)
 
     def reload(self):
-        pass
-        # try:
-        #     with open(self.__file_path, "r") as jsonFile:
-        #         data = json.load(jsonFile)
-        #         print("data loaded -> ", data)
-        #         print("objs before ->", self.__objects)
-        #         self.__objects = data.copy()
-        #         print("objects now ->", self.__objects)
-        #     print("point ->", self.__objects)
-        # except FileNotFoundError:
-        #     pass
+        try:
+            with open(self.__file_path, "r") as jsonFile:
+                data = json.load(jsonFile)
+                self.__objects = data.copy()
+        except FileNotFoundError:
+            pass
