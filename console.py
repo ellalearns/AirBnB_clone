@@ -77,9 +77,12 @@ class HBNBCommand(cmd.Cmd):
                 all_objects = storage.all()
                 if key in all_objects:
                     obj = all_objects[key]
-                    newClassObject = models.all_classes[command[0]]
-                    initNewClassObject = newClassObject(**obj)
-                    print(initNewClassObject.__str__())
+                    if type(obj) is not dict:
+                        print(str(obj))
+                    else:
+                        newClassObject = models.all_classes[command[0]]
+                        initNewClassObject = newClassObject(**obj)
+                        print(initNewClassObject.__str__())
                 else:
                     print("** no instance found **")
         else:
@@ -117,18 +120,24 @@ class HBNBCommand(cmd.Cmd):
         if not command:
             for key, value in all_objects.items():
                 className = key.split(".")[0]
-                obj = models.all_classes[className]
-                newObj = obj(**value)
-                print(newObj.__str__())
+                if type(value) is not dict:
+                    print(str(value))
+                else:
+                    obj = models.all_classes[className]
+                    newObj = obj(**value)
+                    print(newObj.__str__())
         else:
             command = command.split()[0]
             if command in models.all_classes:
                 for key, value in all_objects.items():
                     className = key.split(".")[0]
                     if command == className:
-                        obj = models.all_classes[className]
-                        newObj = obj(**value)
-                        print(newObj.__str__())
+                        if type(value) is not dict:
+                            print(str(value))
+                        else:
+                            obj = models.all_classes[className]
+                            newObj = obj(**value)
+                            print(newObj.__str__())
                     else:
                         pass
             else:
@@ -162,7 +171,9 @@ class HBNBCommand(cmd.Cmd):
                 keyName = command[0] + "." + command[1]
                 className = models.all_classes[command[0]]
                 data = storage.all().get(keyName)
-                objInstance = className(**data)
+                print(data)
+                objInstance = className(data)
+                print(objInstance)
                 if hasattr(objInstance, command[2]):
                     objType = type(getattr(objInstance, command[2]))
                     setattr(objInstance, command[2], objType(command[3]))
@@ -170,6 +181,72 @@ class HBNBCommand(cmd.Cmd):
                     setattr(objInstance, command[2], command[3])
                 storage.all()[keyName] = objInstance.to_dict()
                 storage.save()
+    
+    def default(self, line):
+        """
+        function to handle unknown commands
+        before displaying a custom error message
+        doesn't include empty lines
+        """
+        all_methods = self.all_methods()
+        all_classes = models.all_classes
+        errorMessage = "** invalid command **"
+
+        try:
+            line = line.split(".")
+            if len(line) < 2:
+                print(errorMessage)
+            else:
+                formattedCommand = self.parseCommand(line)
+                className = formattedCommand["className"]
+                methodName = formattedCommand["methodName"]
+                methodArguments = formattedCommand["methodArguments"]
+                if className in all_classes \
+                and methodName in all_methods:
+                    method = getattr(self, "do_" + methodName)
+                    if callable(method):
+                        try:
+                            method(" ".join([className, methodArguments]))
+                        except:
+                            print("something happened")
+                    else:
+                        print(errorMessage)
+                else:
+                    print(errorMessage)
+        except:
+            print(errorMessage)
+    
+    def all_methods(self):
+        """
+        gets list of available methods...
+        ...defined in console tool
+        """
+        all_methods = [method.split("_")[1] \
+                       for method in dir(self) \
+                        if method.startswith("do_")]
+        return all_methods
+    
+    def parseCommand(self, line):
+        """
+        parse a line
+        return class name, method name, and arguments
+        """
+        className = line[0]
+
+        parameters = line[1].split("(")
+        methodName = parameters[0]
+
+        methodArguments = []
+        if len(parameters[1]) > 1:
+            arguments = parameters[1][:-1]
+            methodArguments = arguments.split(", ")
+        methodArguments = " ".join(methodArguments)
+
+        return {
+            "className": className,
+            "methodName": methodName,
+            "methodArguments": methodArguments
+        }
 
 
 if __name__ == '__main__':
