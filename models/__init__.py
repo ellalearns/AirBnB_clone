@@ -11,8 +11,10 @@ def all_classes():
     return all available classes
     """
     from models.base_model import BaseModel
+    from models.user import User
     return {
-        "BaseModel": BaseModel
+        "BaseModel": BaseModel,
+        "User": User
     }
 
 
