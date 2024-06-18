@@ -171,9 +171,11 @@ class HBNBCommand(cmd.Cmd):
                 keyName = command[0] + "." + command[1]
                 className = models.all_classes[command[0]]
                 data = storage.all().get(keyName)
-                print(data)
-                objInstance = className(data)
-                print(objInstance)
+                if type(data) is dict:
+                    objInstance = className(**data)
+                else:
+                    data = data.to_dict()
+                    objInstance = className(**data)
                 if hasattr(objInstance, command[2]):
                     objType = type(getattr(objInstance, command[2]))
                     setattr(objInstance, command[2], objType(command[3]))
@@ -181,7 +183,7 @@ class HBNBCommand(cmd.Cmd):
                     setattr(objInstance, command[2], command[3])
                 storage.all()[keyName] = objInstance.to_dict()
                 storage.save()
-    
+
     def default(self, line):
         """
         function to handle unknown commands
