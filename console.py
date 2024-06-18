@@ -108,6 +108,32 @@ class HBNBCommand(cmd.Cmd):
         else:
             print("** class doesn't exist **")
 
+    def do_all(self, command):
+        """
+        prints string representation of all instances
+        based or not on class name
+        """
+        all_objects =  storage.all()
+        if not command:
+            for key, value in all_objects.items():
+                className = key.split(".")[0]
+                obj = models.all_classes[className]
+                newObj = obj(**value)
+                print(newObj.__str__())
+        else:
+            command = command.split()[0]
+            if command in models.all_classes:
+                for key, value in all_objects.items():
+                    className = key.split(".")[0]
+                    if command == className:
+                        obj = models.all_classes[className]
+                        newObj = obj(**value)
+                        print(newObj.__str__())
+                    else:
+                        pass
+            else:
+                print("** class doesn't exist **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
