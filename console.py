@@ -3,8 +3,9 @@
 main entry point for console tool
 """
 
-
+import ast
 import cmd
+import json
 import models
 from models import storage
 import models.base_model
@@ -171,7 +172,22 @@ class HBNBCommand(cmd.Cmd):
         if not command:
             print("** class name missing **")
         else:
-            command = command.split()
+            if " {" in command:
+                newCommandList = []
+                command = command.split(" {")
+                newCommandList.append(command[0].split()[0])
+                newCommandList.append(command[0].split()[1])
+                strDict = "{" + command[1]
+                print("strdict", strDict)
+                if ',' not in strDict:
+                    strDict = strDict.replace('" "', '", "')
+                if "'" in strDict:
+                    strDict = strDict.replace("'", '"')
+                fromStrDict = json.loads(strDict)
+                newCommandList.append(fromStrDict)
+                command = newCommandList
+            else:
+                command = command.split()
             if command[0] not in models.all_classes:
                 print("** class doesn't exist **")
             elif len(command) < 2:
@@ -184,8 +200,30 @@ class HBNBCommand(cmd.Cmd):
                 print("** attribute name missing **")
                 return None
             elif len(command) < 4:
-                print("** value missing **")
-                return None
+                if command[0] + "." + command[1] not in storage.all():
+                    print("** no instance found **")
+                    return None
+                else:
+                    if type(command[2]) is dict:
+                        keyName1 = command[0] + "." + command[1]
+                        className1 = models.all_classes[command[0]]
+                        data1 = storage.all().get(keyName1)
+                        if type(data1) is dict:
+                            objInstance1 = className1(**data1)
+                        else:
+                            data1 = data1.to_dict()
+                            objInstance1 = className1(**data1)
+                        for key, value in command[2].items():
+                            if hasattr(objInstance1, key):
+                                objType1 = type(getattr(objInstance1, key))
+                                setattr(objInstance1, key, objType1(value))
+                            else:
+                                setattr(objInstance1, key, value)
+                        storage.all()[keyName1] = objInstance1.to_dict()
+                        storage.save()
+                    else:
+                        print("** value missing **")
+                        return None
             else:
                 keyName = command[0] + "." + command[1]
                 className = models.all_classes[command[0]]
