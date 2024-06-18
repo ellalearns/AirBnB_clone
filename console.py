@@ -113,7 +113,7 @@ class HBNBCommand(cmd.Cmd):
         prints string representation of all instances
         based or not on class name
         """
-        all_objects =  storage.all()
+        all_objects = storage.all()
         if not command:
             for key, value in all_objects.items():
                 className = key.split(".")[0]
@@ -133,6 +133,43 @@ class HBNBCommand(cmd.Cmd):
                         pass
             else:
                 print("** class doesn't exist **")
+
+    def do_update(self, command):
+        """
+        update an instance based on class name and id
+        add or update attribute
+        save change to json file
+        """
+        if not command:
+            print("** class name missing **")
+        else:
+            command = command.split()
+            if command[0] not in models.all_classes:
+                print("** class doesn't exist **")
+            elif len(command) < 2:
+                print("** instance id missing **")
+                return None
+            elif command[0] + "." + command[1] not in storage.all():
+                print("** no instance found **")
+                return None
+            elif len(command) < 3:
+                print("** attribute name missing **")
+                return None
+            elif len(command) < 4:
+                print("** value missing **")
+                return None
+            else:
+                keyName = command[0] + "." + command[1]
+                className = models.all_classes[command[0]]
+                data = storage.all().get(keyName)
+                objInstance = className(**data)
+                if hasattr(objInstance, command[2]):
+                    objType = type(getattr(objInstance, command[2]))
+                    setattr(objInstance, command[2], objType(command[3]))
+                else:
+                    setattr(objInstance, command[2], command[3])
+                storage.all()[keyName] = objInstance.to_dict()
+                storage.save()
 
 
 if __name__ == '__main__':
