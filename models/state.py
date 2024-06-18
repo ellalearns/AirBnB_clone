@@ -18,7 +18,6 @@ class State(BaseModel):
         """
         if not kwargs:
             super().__init__()
-            self.state = state
         else:
             super().__init__(**kwargs)
-            self.state = kwargs.get("state")
+        self.state = state

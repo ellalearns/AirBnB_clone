@@ -16,9 +16,8 @@ class Amenity(BaseModel):
         """
         each time amenity is initialized
         """
-        if not kwargs:
-            super().__init__()
-            self.name = name
-        else:
+        if kwargs:
             super().__init__(**kwargs)
-            self.name = kwargs.get("name")
+        else:
+            super().__init__()
+        self.name = name

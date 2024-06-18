@@ -12,17 +12,18 @@ class Review(BaseModel):
     """
     Review class definition
     """
-    def __init__(self, **kwargs):
+    def __init__(self,
+                 place_id="",
+                 user_id="",
+                 text="",
+                 **kwargs):
         """
         each time review is initialized
         """
         if not kwargs:
             super().__init__()
-            self.place_id = ""
-            self.user_id = ""
-            self.text = ""
         else:
             super().__init__(**kwargs)
-            self.place_id = kwargs.get("place_id")
-            self.user_id = kwargs.get("user_id")
-            self.text = kwargs.get("text")
+        self.place_id = place_id
+        self.user_id = user_id
+        self.text = text
