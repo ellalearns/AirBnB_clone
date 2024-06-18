@@ -143,6 +143,25 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** class doesn't exist **")
 
+    def do_count(self, command):
+        """
+        retrieve number of instances of a class
+        based on class name
+        """
+        all_objects = storage.all()
+        if command:
+            command = command.split()[0]
+            if command in models.all_classes:
+                count = 0
+                for key, value in all_objects.items():
+                    if command in key:
+                        count += 1
+                print(count)
+            else:
+                print("** class doesn't exist **")
+        else:
+            print("** class name missing **")
+
     def do_update(self, command):
         """
         update an instance based on class name and id
@@ -217,7 +236,7 @@ class HBNBCommand(cmd.Cmd):
                     print(errorMessage)
         except:
             print(errorMessage)
-    
+
     def all_methods(self):
         """
         gets list of available methods...
