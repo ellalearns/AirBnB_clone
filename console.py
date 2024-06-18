@@ -78,7 +78,7 @@ class HBNBCommand(cmd.Cmd):
                 if key in all_objects:
                     obj = all_objects[key]
                     newClassObject = models.all_classes[command[0]]
-                    initNewClassObject = newClassObject(obj)
+                    initNewClassObject = newClassObject(**obj)
                     print(initNewClassObject.__str__())
                 else:
                     print("** no instance found **")
